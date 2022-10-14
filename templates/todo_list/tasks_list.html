@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    TODO List website
+    <a href="{% url 'todo_list:task-create' %}" class="btn btn-primary link-to-page">
+      Add task
+    </a>
+  </h1>
+
+  {% if tasks_list %}
+    <ul class="list-unstyled">
+      {% for task in tasks_list %}
+        <li class="list-group-item-action">
+          <p>
+            <span class="h3">{{ task.content }} </span>
+              {% if task.done %}
+                <span class="badge badge-success">Done</span>
+              {% else %}
+                <span class="badge badge-danger">Not done</span>
+              {% endif %}
+                <a href="{% url 'todo_list:task-update' pk=task.id %}" class="btn btn-dark link-to-page">
+                  Update
+                </a>
+                <a href="{% url 'todo_list:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
+                  Delete
+                </a>
+                {% if task.done %}
+                  <a href="{% url 'todo_list:done_or_undo' pk=task.id %}" class="btn btn-dark link-to-page">
+                    Undo
+                  </a>
+                {% else %}
+                  <a href="{% url 'todo_list:done_or_undo' pk=task.id %}" class="btn btn-success link-to-page">
+                    Complete
+                  </a>
+                {% endif %}
+          </p>
+          <p class="text-info">
+            Created: {{ task.created_at }}
+            {% if task.deadline  %}
+              <p class="text-danger">
+                Deadline: {{ task.deadline }}
+              </p>
+            {% else %}
+              <p class="text-danger">There is no deadline</p>
+            {% endif %}
+          </p>
+            <p>
+              <strong>tags:</strong>
+                {% for tag in task.tags.values %}
+                  <span class="badge badge-info">{{ tag.name }}</span>
+                {% endfor %}
+            </p>
+            <p>
+            </p>
+          {% if task.detail %}
+            <p class="text-secondary">
+              {{ task.detail }}
+            </p>
+          {% endif %}
+        </li>
+        <hr>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no created tasks</p>
+  {% endif %}
+{% endblock %}
