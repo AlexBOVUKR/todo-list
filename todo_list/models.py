@@ -23,18 +23,7 @@ class Task(models.Model):
     tags = models.ManyToManyField(Tag, related_name="tasks")
 
     class Meta:
-        ordering = ["deadline"]
+        ordering = ["done", "deadline"]
 
     def __str__(self):
         return f"{self.created_at}: {self.content} "
-
-    @property
-    def timedelta(self):
-        now = datetime.datetime.now()
-        if self.deadline:
-            if now > self.deadline:
-                time_left = self.deadline - now
-                time_left = str(time_left)
-                result = time_left.split(".")
-                return result
-        return ""
